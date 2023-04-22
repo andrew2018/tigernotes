@@ -1,5 +1,6 @@
-rootProject.name = "sale-phones"
-include("m1l1-hello")
+rootProject.name = "tigernotes"
+// include("m1l1-hello")
+include("tn-acceptance")
 
 pluginManagement {
     val kotlinVersion: String by settings

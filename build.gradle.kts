@@ -4,6 +4,9 @@ plugins {
     kotlin("jvm")
 }
 
+group = "ru.otus.tigernotes"
+version = "1.0-SNAPSHOT"
+
 allprojects {
     repositories {
         google()
@@ -13,9 +16,6 @@ allprojects {
 }
 
 subprojects {
-    group = "ru.otus"
-    version = "1.0-SNAPSHOT"
-
     tasks.withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "17"
     }

@@ -1,0 +1,356 @@
+openapi: 3.0.4
+info:
+  title: "TigerNotes"
+  description: Notes with notification
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+tags:
+  - name: note
+    description: Заметка
+paths:
+  /node/create:
+    post:
+      tags:
+        - note
+      summary: Create note
+      operationId: noteCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteCreateResponse'
+  /note/read:
+    post:
+      tags:
+        - note
+      summary: Read note
+      operationId: noteRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteReadResponse'
+  /note/update:
+    post:
+      tags:
+        - note
+      summary: Update note
+      operationId: noteUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteUpdateResponse'
+  /note/delete:
+    post:
+      tags:
+        - note
+      summary: Delete note
+      operationId: noteDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteDeleteResponse'
+  /note/search:
+    post:
+      tags:
+        - note
+      summary: Search note
+      operationId: noteSearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteSearchResponse'
+
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/NoteCreateRequest'
+          read:   '#/components/schemas/NoteReadRequest'
+          update: '#/components/schemas/NoteUpdateRequest'
+          delete: '#/components/schemas/NoteDeleteRequest'
+          search: '#/components/schemas/NoteSearchRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/NoteCreateResponse'
+          read:   '#/components/schemas/NoteReadResponse'
+          update: '#/components/schemas/NoteUpdateResponse'
+          delete: '#/components/schemas/NoteDeleteResponse'
+          search: '#/components/schemas/NoteSearchResponse'
+
+    NoteId:
+      type: string
+      description: Идентификатор заметки
+
+    NoteObject:
+      type: object
+      description: Базовый объект заметки
+      properties:
+        title:
+          type: string
+          description: Заголовок зметки
+        description:
+          type: string
+          description: Описание заметки
+        email:
+          type: string
+          description: Почта
+        timeReminder:
+          type: string
+          description: Время напоминания
+
+    NoteCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NoteRequestDebug'
+        - type: object
+          properties:
+            noteCreate:
+              $ref: '#/components/schemas/NoteObject'
+
+    NoteReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NoteRequestDebug'
+        - type: object
+          properties:
+            noteId:
+              $ref: '#/components/schemas/NoteId'
+
+    NoteUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/NoteObject'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/NoteId'
+
+    NoteUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NoteRequestDebug'
+        - type: object
+          properties:
+            noteUpdate:
+              $ref: '#/components/schemas/NoteUpdateObject'
+
+    NoteDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NoteRequestDebug'
+        - type: object
+          properties:
+            noteId:
+              $ref: '#/components/schemas/NoteId'
+
+    NoteSearchFilter:
+      type: object
+      description: Набор фильтров для поиска
+      properties:
+        title:
+          type: string
+          description: Поиск по заголовку
+        dateStart:
+          type: string
+          description: Поиск начиная с указанной даты
+        dateEnd:
+          type: string
+          description: Поиск заканчивая указанной даты
+
+    NoteSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NoteRequestDebug'
+        - type: object
+          properties:
+            noteFilter:
+              $ref: '#/components/schemas/NoteSearchFilter'
+
+    NoteResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/NoteObject'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/NoteId'
+
+    NoteResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом объявления
+          properties:
+            note:
+              $ref: '#/components/schemas/NoteResponseObject'
+
+    NoteResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            notes:
+              type: array
+              items:
+                $ref: '#/components/schemas/NoteResponseObject'
+
+    NoteCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NoteResponseSingle'
+
+    NoteReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NoteResponseSingle'
+
+    NoteUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NoteResponseSingle'
+
+    NoteDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NoteResponseSingle'
+
+    NoteSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NoteResponseMulti'
+
+    # STUBS ======================
+    NoteRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    NoteRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/NoteDebug'
+
+    NoteDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/NoteRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/NoteRequestDebugStubs'
+
+    NoteRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badTitle
+        - badDescription
+        - badEmail
+        - badTimeReminder
+        - cannotDelete
+        - badSearchTitle
+        - badSearchDateStart
+        - badSearchDateEnd

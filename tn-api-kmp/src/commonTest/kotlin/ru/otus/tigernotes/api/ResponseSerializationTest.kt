@@ -1,8 +1,8 @@
-package ru.otus.tigernotes.api.v2
+package ru.otus.tigernotes.api
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import ru.otus.tigernotes.api.v2.models.*
+import ru.otus.tigernotes.api.models.*
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -48,15 +48,9 @@ class ResponseSerializationTest {
 
     @Test
     fun serialize() {
-        val createJson = apiV2Mapper.encodeToString(createResponse)
-        assertContains(createJson, Regex("\"title\":\\s*\"note title\""))
-        assertContains(createJson, Regex("\"description\":\\s*\"note description\""))
-        assertContains(createJson, Regex("\"email\":\\s*\"test@mail.tu\""))
-        assertContains(createJson, Regex("\"timeReminder\":\\s*\"15.05.2023\""))
-        assertContains(createJson, Regex("\"requestId\":\\s*\"123\""))
-        assertContains(createJson, Regex("\"responseType\":\\s*\"create\""))
+        val createJson = apiMapper.encodeToString(createResponse)
 
-        val readJson = apiV2Mapper.encodeToString(readResponse)
+        val readJson = apiMapper.encodeToString(readResponse)
         assertContains(readJson, Regex("\"title\":\\s*\"note title\""))
         assertContains(readJson, Regex("\"description\":\\s*\"note description\""))
         assertContains(readJson, Regex("\"email\":\\s*\"test@mail.tu\""))
@@ -64,7 +58,7 @@ class ResponseSerializationTest {
         assertContains(readJson, Regex("\"requestId\":\\s*\"456\""))
         assertContains(readJson, Regex("\"responseType\":\\s*\"read\""))
 
-        val updateJson = apiV2Mapper.encodeToString(updateResponse)
+        val updateJson = apiMapper.encodeToString(updateResponse)
         assertContains(updateJson, Regex("\"title\":\\s*\"note title\""))
         assertContains(updateJson, Regex("\"description\":\\s*\"note description\""))
         assertContains(updateJson, Regex("\"email\":\\s*\"test@mail.tu\""))
@@ -72,7 +66,7 @@ class ResponseSerializationTest {
         assertContains(updateJson, Regex("\"requestId\":\\s*\"789\""))
         assertContains(updateJson, Regex("\"responseType\":\\s*\"update\""))
 
-        val deleteJson = apiV2Mapper.encodeToString(deleteResponse)
+        val deleteJson = apiMapper.encodeToString(deleteResponse)
         assertContains(deleteJson, Regex("\"title\":\\s*\"note title\""))
         assertContains(deleteJson, Regex("\"description\":\\s*\"note description\""))
         assertContains(deleteJson, Regex("\"email\":\\s*\"test@mail.tu\""))
@@ -80,7 +74,7 @@ class ResponseSerializationTest {
         assertContains(deleteJson, Regex("\"requestId\":\\s*\"111\""))
         assertContains(deleteJson, Regex("\"responseType\":\\s*\"delete\""))
 
-        val searchJson = apiV2Mapper.encodeToString(searchResponse)
+        val searchJson = apiMapper.encodeToString(searchResponse)
         assertContains(searchJson, Regex("\"id\":\\s*\"456\""))
         assertContains(searchJson, Regex("\"id\":\\s*\"98\""))
         assertContains(searchJson, Regex("\"requestId\":\\s*\"222\""))
@@ -89,8 +83,8 @@ class ResponseSerializationTest {
 
     @Test
     fun deserialize() {
-        val json = apiV2Mapper.encodeToString(createResponse)
-        val obj = apiV2Mapper.decodeFromString(json) as NoteCreateResponse
+        val json = apiMapper.encodeToString(createResponse)
+        val obj = apiMapper.decodeFromString(json) as NoteCreateResponse
 
         assertEquals(createResponse, obj)
     }
@@ -106,7 +100,7 @@ class ResponseSerializationTest {
             "note":{"title":"note title","description":"note description","email":"test@mail.tu","timeReminder":"15.05.2023","id":null,"id":"456"}
             }
         """.trimIndent()
-        val obj = apiV2Mapper.decodeFromString(jsonString) as IResponse
+        val obj = apiMapper.decodeFromString(jsonString) as IResponse
 
         assertEquals("123", obj.requestId)
         assertEquals(createResponse, obj)

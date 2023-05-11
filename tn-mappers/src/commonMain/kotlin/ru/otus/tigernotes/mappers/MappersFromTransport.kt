@@ -9,8 +9,7 @@ import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.models.*
 import ru.otus.tigernotes.common.stubs.TnStubs
 import ru.otus.tigernotes.mappers.exceptions.UnknownRequestClass
-import ru.otus.tigernotes.api.v2.models.*
-import ru.otus.tigernotes.common.models.*
+import ru.otus.tigernotes.api.models.*
 
 fun TnContext.fromTransport(request: IRequest) = when (request) {
     is NoteCreateRequest -> fromTransport(request)

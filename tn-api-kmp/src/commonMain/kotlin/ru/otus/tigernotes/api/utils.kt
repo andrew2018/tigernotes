@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 
-package ru.otus.tigernotes.api.v2
+package ru.otus.tigernotes.api
 
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -12,8 +12,8 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.modules.SerializersModuleBuilder
 import kotlinx.serialization.modules.contextual
-import ru.otus.tigernotes.api.v2.models.IRequest
-import ru.otus.tigernotes.api.v2.models.IResponse
+import ru.otus.tigernotes.api.models.IRequest
+import ru.otus.tigernotes.api.models.IResponse
 import kotlin.reflect.KClass
 
 internal data class PolymorphicInfo<S : Any, T : S>(

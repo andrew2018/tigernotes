@@ -5,7 +5,7 @@ import kotlinx.datetime.LocalDate
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.models.*
 import ru.otus.tigernotes.common.stubs.TnStubs
-import ru.otus.tigernotes.api.v2.models.*
+import ru.otus.tigernotes.api.models.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

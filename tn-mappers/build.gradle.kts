@@ -2,9 +2,6 @@ plugins {
     kotlin("multiplatform")
 }
 
-group = rootProject.group
-version = rootProject.version
-
 kotlin {
     jvm {}
     macosX64 {}
@@ -15,7 +12,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-common"))
 
-                implementation(project(":tn-api-v2-kmp"))
+                implementation(project(":tn-api-kmp"))
                 implementation(project(":tn-common"))
             }
         }
@@ -23,15 +20,6 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
-            }
-        }
-        val jvmMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib"))
-            }
-        }
-        val jvmTest by getting {
-            dependencies {
                 implementation(kotlin("test-junit"))
             }
         }

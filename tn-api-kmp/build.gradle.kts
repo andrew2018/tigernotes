@@ -29,11 +29,6 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
-            }
-        }
-        @Suppress("UNUSED_VARIABLE")
-        val jvmTest by getting {
-            dependencies {
                 implementation(kotlin("test-junit"))
             }
         }
@@ -44,13 +39,13 @@ kotlin {
  * Настраиваем генерацию здесь
  */
 openApiGenerate {
-    val openapiGroup = "${rootProject.group}.api.v2"
+    val openapiGroup = "${rootProject.group}.api"
     generatorName.set("kotlin") // Это и есть активный генератор
     packageName.set(openapiGroup)
     apiPackage.set("$openapiGroup.api")
     modelPackage.set("$openapiGroup.models")
     invokerPackage.set("$openapiGroup.invoker")
-    inputSpec.set("$rootDir/specs/specs-note-v2.yaml")
+    inputSpec.set("$rootDir/specs/specs-note.yaml")
     library.set("multiplatform")
 
     /**

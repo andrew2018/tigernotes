@@ -1,8 +1,8 @@
-package ru.otus.tigernotes.api.v2
+package ru.otus.tigernotes.api
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import ru.otus.tigernotes.api.v2.models.*
+import ru.otus.tigernotes.api.models.*
 
 /**
  * Добавляйте сюда элементы при появлении новых наследников IRequest / IResponse
@@ -21,7 +21,7 @@ internal val infos = listOf(
     info(NoteSearchResponse::class, IResponse::class, "search") { copy(responseType = it) },
 )
 
-val apiV2Mapper = Json {
+val apiMapper = Json {
     classDiscriminator = "_"
     encodeDefaults = true
     ignoreUnknownKeys = true

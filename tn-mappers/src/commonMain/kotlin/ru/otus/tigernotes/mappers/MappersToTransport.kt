@@ -5,7 +5,7 @@ import ru.otus.tigernotes.common.NONE
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.models.*
 import ru.otus.tigernotes.mappers.exceptions.UnknownTnCommand
-import ru.otus.tigernotes.api.v2.models.*
+import ru.otus.tigernotes.api.models.*
 
 fun TnContext.toTransportNote(): IResponse = when (val cmd = command) {
     TnCommand.CREATE -> toTransportCreate()

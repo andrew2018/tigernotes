@@ -15,7 +15,7 @@ pluginManagement {
 // include("m1l1-hello")
 include("tn-acceptance")
 
-include("tn-api-v2-kmp")
+include("tn-api-kmp")
 
 include("tn-common")
 include("tn-mappers")

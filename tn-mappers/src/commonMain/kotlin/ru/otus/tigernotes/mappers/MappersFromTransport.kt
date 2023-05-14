@@ -95,6 +95,7 @@ private fun NoteSearchFilter?.toInternal(): NoteFilter = NoteFilter(
 private fun NoteObject.toInternal(): Note = Note(
     title = this.title ?: "",
     description = this.description ?: "",
+    timeCreate = this.timeCreate?.toInstant() ?: Instant.NONE,
     email = this.email ?: "",
     timeReminder = this.timeReminder?.toInstant() ?: Instant.NONE
 )
@@ -103,6 +104,7 @@ private fun NoteUpdateObject.toInternal(): Note = Note(
     id = this.id.toNoteId(),
     title = this.title ?: "",
     description = this.description ?: "",
+    timeCreate = this.timeCreate?.toInstant() ?: Instant.NONE,
     email = this.email ?: "",
     timeReminder = this.timeReminder?.toInstant() ?: Instant.NONE
 )

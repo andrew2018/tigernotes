@@ -21,6 +21,7 @@ class MapperTest {
             noteCreate = NoteObject(
                 title = "title",
                 description = "desc",
+                timeCreate = "2023-04-01T11:00:00Z",
                 email = "email",
                 timeReminder = "2023-04-01T12:00:00Z"
             ),
@@ -34,6 +35,7 @@ class MapperTest {
         assertEquals(TnWorkMode.STUB, context.workMode)
         assertEquals("title", context.note.title)
         assertEquals("desc", context.note.description)
+        assertEquals(Instant.parse("2023-04-01T11:00:00Z"), context.note.timeCreate)
         assertEquals("email", context.note.email)
         assertEquals(Instant.parse("2023-04-01T12:00:00Z"), context.note.timeReminder)
     }
@@ -46,6 +48,7 @@ class MapperTest {
             noteResponse = Note(
                 title = "title",
                 description = "desc",
+                timeCreate = Instant.parse("2023-04-01T11:00:00Z"),
                 email = "email",
                 timeReminder = Instant.parse("2023-04-01T12:00:00Z")
             ),
@@ -65,6 +68,7 @@ class MapperTest {
         assertEquals("1234", req.requestId)
         assertEquals("title", req.note?.title)
         assertEquals("desc", req.note?.description)
+        assertEquals("2023-04-01T11:00:00Z", req.note?.timeCreate)
         assertEquals("email", req.note?.email)
         assertEquals("2023-04-01T12:00:00Z", req.note?.timeReminder)
         assertEquals(1, req.errors?.size)
@@ -103,6 +107,7 @@ class MapperTest {
                 id = NoteId("456"),
                 title = "title",
                 description = "desc",
+                timeCreate = Instant.parse("2023-04-01T11:00:00Z"),
                 email = "email",
                 timeReminder = Instant.parse("2023-04-01T12:00:00Z")
             ),
@@ -115,6 +120,7 @@ class MapperTest {
         assertEquals("456", req.note?.id)
         assertEquals("title", req.note?.title)
         assertEquals("desc", req.note?.description)
+        assertEquals("2023-04-01T11:00:00Z", req.note?.timeCreate)
         assertEquals("email", req.note?.email)
         assertEquals("2023-04-01T12:00:00Z", req.note?.timeReminder)
         assertEquals(ResponseResult.SUCCESS, req.result)
@@ -132,6 +138,7 @@ class MapperTest {
                 id = "456",
                 title = "title",
                 description = "desc",
+                timeCreate = "2023-04-01T11:00:00Z",
                 email = "email",
                 timeReminder = "2023-04-01T12:00:00Z"
             ),
@@ -146,6 +153,7 @@ class MapperTest {
         assertEquals("456", context.note.id.asString())
         assertEquals("title", context.note.title)
         assertEquals("desc", context.note.description)
+        assertEquals(Instant.parse("2023-04-01T11:00:00Z"), context.note.timeCreate)
         assertEquals("email", context.note.email)
         assertEquals(Instant.parse("2023-04-01T12:00:00Z"), context.note.timeReminder)
     }
@@ -159,6 +167,7 @@ class MapperTest {
                 id = NoteId("456"),
                 title = "title",
                 description = "desc",
+                timeCreate = Instant.parse("2023-04-01T11:00:00Z"),
                 email = "email",
                 timeReminder = Instant.parse("2023-04-01T12:00:00Z")
             ),
@@ -171,6 +180,7 @@ class MapperTest {
         assertEquals("456", req.note?.id)
         assertEquals("title", req.note?.title)
         assertEquals("desc", req.note?.description)
+        assertEquals("2023-04-01T11:00:00Z", req.note?.timeCreate)
         assertEquals("email", req.note?.email)
         assertEquals("2023-04-01T12:00:00Z", req.note?.timeReminder)
         assertEquals(ResponseResult.SUCCESS, req.result)
@@ -204,6 +214,7 @@ class MapperTest {
                 id = NoteId("456"),
                 title = "title",
                 description = "desc",
+                timeCreate = Instant.parse("2023-04-01T11:00:00Z"),
                 email = "email",
                 timeReminder = Instant.parse("2023-04-01T12:00:00Z")
             ),
@@ -216,6 +227,7 @@ class MapperTest {
         assertEquals("456", req.note?.id)
         assertEquals("title", req.note?.title)
         assertEquals("desc", req.note?.description)
+        assertEquals("2023-04-01T11:00:00Z", req.note?.timeCreate)
         assertEquals("email", req.note?.email)
         assertEquals("2023-04-01T12:00:00Z", req.note?.timeReminder)
         assertEquals(ResponseResult.SUCCESS, req.result)
@@ -256,6 +268,7 @@ class MapperTest {
                     id = NoteId("456"),
                     title = "title1",
                     description = "desc1",
+                    timeCreate = Instant.parse("2023-04-01T10:00:00Z"),
                     email = "email1",
                     timeReminder = Instant.parse("2023-04-01T12:00:00Z")
                 ),
@@ -263,6 +276,7 @@ class MapperTest {
                     id = NoteId("789"),
                     title = "title2",
                     description = "desc2",
+                    timeCreate = Instant.parse("2023-04-02T11:00:00Z"),
                     email = "email2",
                     timeReminder = Instant.parse("2023-04-02T12:00:00Z")
                 ),
@@ -277,12 +291,14 @@ class MapperTest {
         assertEquals("456", req.notes?.first()?.id)
         assertEquals("title1", req.notes?.first()?.title)
         assertEquals("desc1", req.notes?.first()?.description)
+        assertEquals("2023-04-01T10:00:00Z", req.notes?.first()?.timeCreate)
         assertEquals("email1", req.notes?.first()?.email)
         assertEquals("2023-04-01T12:00:00Z", req.notes?.first()?.timeReminder)
 
         assertEquals("789", req.notes?.last()?.id)
         assertEquals("title2", req.notes?.last()?.title)
         assertEquals("desc2", req.notes?.last()?.description)
+        assertEquals("2023-04-02T11:00:00Z", req.notes?.last()?.timeCreate)
         assertEquals("email2", req.notes?.last()?.email)
         assertEquals("2023-04-02T12:00:00Z", req.notes?.last()?.timeReminder)
 

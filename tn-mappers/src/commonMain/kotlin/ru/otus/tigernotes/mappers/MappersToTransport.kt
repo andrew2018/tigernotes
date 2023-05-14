@@ -60,8 +60,9 @@ private fun Note.toTransportNote(): NoteResponseObject = NoteResponseObject(
     id = id.takeIf { it != NoteId.NONE }?.asString(),
     title = title.takeIf { it.isNotBlank() },
     description = description.takeIf { it.isNotBlank() },
+    timeCreate = timeCreate.takeIf { it != Instant.NONE }.toString(),
     email = email.takeIf { it.isNotBlank() },
-    timeReminder = timeReminder.takeIf { it != Instant.NONE }.toString(),
+    timeReminder = timeReminder.takeIf { it != Instant.NONE }.toString()
 )
 
 private fun List<TnError>.toTransportErrors(): List<Error>? = this

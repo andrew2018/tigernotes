@@ -191,6 +191,9 @@ components:
         description:
           type: string
           description: Описание заметки
+        timeCreate:
+          type: string
+          description: Время создания заметки
         email:
           type: string
           description: Почта

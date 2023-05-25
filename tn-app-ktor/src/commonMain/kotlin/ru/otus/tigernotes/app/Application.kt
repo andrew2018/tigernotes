@@ -20,7 +20,7 @@ fun Application.module(processor: NoteProcessor = NoteProcessor()) {
 }
 
 fun main() {
-    embeddedServer(CIO, port = 8080) {
+    embeddedServer(CIO) {
         module()
     }.start(wait = true)
 }

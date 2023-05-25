@@ -66,9 +66,9 @@ class NoteStubApiTest {
             val requestObj = NoteUpdateRequest(
                 requestId = "12345",
                 noteUpdate = NoteUpdateObject(
-                    id = "666",
-                    title = "Болт",
-                    description = "КРУТЕЙШИЙ",
+                    id = "123",
+                    title = "Заметка 1",
+                    description = "заполнить все поля",
                     email = "email",
                     timeReminder = "2023-04-01T12:00:00Z"
                 ),

@@ -17,36 +17,41 @@ fun TnContext.toTransportNote(): IResponse = when (val cmd = command) {
 }
 
 fun TnContext.toTransportCreate() = NoteCreateResponse(
+    responseType = "create",
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == TnState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == TnState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     note = noteResponse.toTransportNote()
 )
 
 fun TnContext.toTransportRead() = NoteReadResponse(
+    responseType = "read",
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == TnState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == TnState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     note = noteResponse.toTransportNote()
 )
 
 fun TnContext.toTransportUpdate() = NoteUpdateResponse(
+    responseType = "update",
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == TnState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == TnState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     note = noteResponse.toTransportNote()
 )
 
 fun TnContext.toTransportDelete() = NoteDeleteResponse(
+    responseType = "delete",
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == TnState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == TnState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     note = noteResponse.toTransportNote()
 )
 
 fun TnContext.toTransportSearch() = NoteSearchResponse(
+    responseType = "search",
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == TnState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == TnState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     notes = notesResponse.toTransportAd()
 )

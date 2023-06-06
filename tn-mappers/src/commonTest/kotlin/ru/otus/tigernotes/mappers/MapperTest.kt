@@ -111,7 +111,7 @@ class MapperTest {
                 email = "email",
                 timeReminder = Instant.parse("2023-04-01T12:00:00Z")
             ),
-            state = TnState.RUNNING,
+            state = TnState.FINISHING
         )
 
         val req = context.toTransportNote() as NoteReadResponse
@@ -171,7 +171,7 @@ class MapperTest {
                 email = "email",
                 timeReminder = Instant.parse("2023-04-01T12:00:00Z")
             ),
-            state = TnState.RUNNING,
+            state = TnState.FINISHING,
         )
 
         val req = context.toTransportNote() as NoteUpdateResponse
@@ -218,7 +218,7 @@ class MapperTest {
                 email = "email",
                 timeReminder = Instant.parse("2023-04-01T12:00:00Z")
             ),
-            state = TnState.RUNNING,
+            state = TnState.FINISHING,
         )
 
         val req = context.toTransportNote() as NoteDeleteResponse
@@ -281,7 +281,7 @@ class MapperTest {
                     timeReminder = Instant.parse("2023-04-02T12:00:00Z")
                 ),
             ),
-            state = TnState.RUNNING,
+            state = TnState.FINISHING,
         )
 
         val req = context.toTransportNote() as NoteSearchResponse

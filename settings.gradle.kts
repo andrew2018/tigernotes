@@ -26,3 +26,4 @@ include("tn-app-biz")
 include("tn-stubs")
 
 include("tn-app-ktor")
+include("tn-app-kafka")

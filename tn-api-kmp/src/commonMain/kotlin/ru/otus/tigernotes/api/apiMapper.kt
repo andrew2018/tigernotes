@@ -1,5 +1,7 @@
 package ru.otus.tigernotes.api
 
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import ru.otus.tigernotes.api.models.*
@@ -30,4 +32,16 @@ val apiMapper = Json {
         setupPolymorphic()
     }
 }
+
+fun apiRequestSerialize(request: IRequest): String = apiMapper.encodeToString(request)
+@Suppress("UNCHECKED_CAST")
+fun <T : IRequest> apiRequestDeserialize(json: String): T =
+    apiMapper.decodeFromString<IRequest>(json) as T
+
+fun apiResponseSerialize(response: IResponse): String = apiMapper.encodeToString(response)
+
+@Suppress("UNCHECKED_CAST")
+fun <T : IResponse> apiResponseDeserialize(json: String): T =
+    apiMapper.decodeFromString<IResponse>(json) as T
+
 

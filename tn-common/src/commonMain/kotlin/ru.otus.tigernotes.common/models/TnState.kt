@@ -4,4 +4,5 @@ enum class TnState {
     NONE,
     RUNNING,
     FAILING,
+    FINISHING,
 }

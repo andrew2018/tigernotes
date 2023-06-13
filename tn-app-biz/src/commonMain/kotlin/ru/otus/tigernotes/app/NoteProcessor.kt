@@ -2,6 +2,7 @@ package ru.otus.tigernotes.app
 
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.models.TnCommand
+import ru.otus.tigernotes.common.models.TnState
 import ru.otus.tigernotes.common.models.TnWorkMode
 import ru.otus.tigernotes.stubs.NoteStub
 
@@ -12,6 +13,7 @@ class NoteProcessor {
             "Currently working only in STUB mode."
         }
 
+        ctx.state = TnState.FINISHING
         when (ctx.command) {
             TnCommand.SEARCH -> {
                 ctx.notesResponse.addAll(NoteStub.prepareSearchList())

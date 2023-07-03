@@ -13,8 +13,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.errors.WakeupException
-import ru.otus.tigernotes.app.NoteProcessor
+import ru.otus.tigernotes.biz.NoteProcessor
 import ru.otus.tigernotes.common.TnContext
+import ru.otus.tigernotes.common.TnCorSettings
 import java.time.Duration
 import java.util.*
 
@@ -25,7 +26,8 @@ data class InputOutputTopics(val input: String, val output: String)
 class AppKafkaConsumer(
     private val config: AppKafkaConfig,
     private val consumerStrategy: ConsumerStrategy,
-    private val processor: NoteProcessor = NoteProcessor(),
+    setting: TnCorSettings = corSettings,
+    private val processor: NoteProcessor = NoteProcessor(setting),
     private val consumer: Consumer<String, String> = config.createKafkaConsumer(),
     private val producer: Producer<String, String> = config.createKafkaProducer()
 ) {

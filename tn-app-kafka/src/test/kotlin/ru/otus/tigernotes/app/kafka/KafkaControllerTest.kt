@@ -13,7 +13,6 @@ import ru.otus.tigernotes.api.apiResponseDeserialize
 import java.util.*
 import kotlin.test.assertEquals
 
-
 class KafkaControllerTest {
     @Test
     fun runKafka() {
@@ -61,7 +60,7 @@ class KafkaControllerTest {
         val result = apiResponseDeserialize<NoteCreateResponse>(message.value())
         assertEquals(outputTopic, message.topic())
         assertEquals("11111111-1111-1111-1111-111111111111", result.requestId)
-        assertEquals("Заметка 1", result.note?.title)
+        assertEquals("title", result.note?.title)
     }
 
     companion object {

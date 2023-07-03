@@ -3,22 +3,23 @@ package ru.otus.tigernotes.app
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
-fun Route.note(processor: NoteProcessor) {
+fun Route.note(appSettings: TnAppSettings) {
+    val loggerNote = appSettings.corSettings.loggerProvider.logger(Route::note)
     route("note") {
         post("create") {
-            call.createNote(processor)
+            call.createNote(appSettings, loggerNote)
         }
         post("read") {
-            call.readNote(processor)
+            call.readNote(appSettings, loggerNote)
         }
         post("update") {
-            call.updateNote(processor)
+            call.updateNote(appSettings, loggerNote)
         }
         post("delete") {
-            call.deleteNote(processor)
+            call.deleteNote(appSettings, loggerNote)
         }
         post("search") {
-            call.searchNote(processor)
+            call.searchNote(appSettings, loggerNote)
         }
     }
 }

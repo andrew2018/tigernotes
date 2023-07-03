@@ -11,7 +11,7 @@ private val log = KotlinLogging.logger {}
 
 suspend fun Client.sendAndReceive(path: String, request: IRequest): IResponse {
     val requestBody = apiRequestSerialize(request)
-    log.warn { "Send to note/$path\n$requestBody" }
+    log.warn { "Send to note$path\n$requestBody" }
 
     val responseBody = sendAndReceive(path, requestBody)
     log.warn { "Received\n$responseBody" }

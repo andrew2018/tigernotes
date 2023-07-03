@@ -12,7 +12,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-common"))
 
-                implementation(project(":tn-api-kmp"))
+                api(project(":tn-api-kmp"))
                 implementation(project(":tn-common"))
             }
         }

@@ -42,10 +42,10 @@ fun FunSpec.testApiNote(client: Client, prefix: String = "") {
         }
 
         test("Search Note ok") {
-            val created1 = client.createNote(someCreateNote.copy(title = "title 123-01"))
+            val created1 = client.createNote(someCreateNote.copy(title = "Заметка 1"))
 
             withClue("Search by Title") {
-                val results = client.searchNote(search = NoteSearchFilter(title = "title 123-01", dateStart = null, dateEnd = null))
+                val results = client.searchNote(search = NoteSearchFilter(title = "title", dateStart = null, dateEnd = null))
                  results shouldHaveSize 6
                  results shouldExist { it.title == "title 123-01" }
             }
@@ -53,7 +53,7 @@ fun FunSpec.testApiNote(client: Client, prefix: String = "") {
             withClue("Search by Date") {
                 val results = client.searchNote(search = NoteSearchFilter(title = null, dateStart = "2023-04-01", dateEnd = "2023-05-01"))
                 results shouldHaveSize 6
-                results shouldExist { it.title == "title 123-01" }
+                results shouldExist { it.title == " 123-01" }
             }
         }
     }

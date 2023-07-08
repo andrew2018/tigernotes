@@ -77,6 +77,8 @@ kotlin {
                 implementation(project(":tn-api-kmp"))
                 implementation(project(":tn-mappers"))
 
+                implementation(project(":tn-lib-logging-kermit"))
+
                 // Stubs
                 implementation(project(":tn-stubs"))
 

@@ -21,7 +21,7 @@ class NoteStubApiTest {
                 noteCreate = NoteObject(
                     title = "Заметка 1",
                     description = "заполнить все поля",
-                    email = "email",
+                    email = "test@mail.ru",
                     timeReminder = "2023-04-01T12:00:00Z"
                 ),
                 debug = NoteDebug(
@@ -69,7 +69,7 @@ class NoteStubApiTest {
                     id = "123",
                     title = "Заметка 1",
                     description = "заполнить все поля",
-                    email = "email",
+                    email = "test@mail.ru",
                     timeReminder = "2023-04-01T12:00:00Z"
                 ),
                 debug = NoteDebug(

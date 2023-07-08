@@ -1,51 +1,26 @@
 package ru.otus.tigernotes.app
 
 import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import ru.otus.tigernotes.api.apiMapper
 import ru.otus.tigernotes.api.models.*
-import ru.otus.tigernotes.common.TnContext
-import ru.otus.tigernotes.mappers.*
+import ru.otus.tigernotes.common.models.TnCommand
+import ru.otus.tigernotes.logging.common.ITnLogWrapper
 
-suspend fun ApplicationCall.createNote(processor: NoteProcessor) {
-    val request = apiMapper.decodeFromString<NoteCreateRequest>(receiveText())
-    val context = TnContext()
-    context.fromTransport(request)
-    processor.exec(context)
-    respond(apiMapper.encodeToString(context.toTransportCreate()))
+suspend fun ApplicationCall.createNote(appSettings: TnAppSettings, logger: ITnLogWrapper) {
+    process<NoteCreateRequest, NoteCreateResponse>(appSettings, logger, "note-create", TnCommand.CREATE)
 }
 
-suspend fun ApplicationCall.readNote(processor: NoteProcessor) {
-    val request = apiMapper.decodeFromString<NoteReadRequest>(receiveText())
-    val context = TnContext()
-    context.fromTransport(request)
-    processor.exec(context)
-    respond(apiMapper.encodeToString(context.toTransportRead()))
+suspend fun ApplicationCall.readNote(appSettings: TnAppSettings, logger: ITnLogWrapper) {
+    process<NoteReadRequest, NoteReadResponse>(appSettings, logger, "note-read", TnCommand.READ)
 }
 
-suspend fun ApplicationCall.updateNote(processor: NoteProcessor) {
-    val request = apiMapper.decodeFromString<NoteUpdateRequest>(receiveText())
-    val context = TnContext()
-    context.fromTransport(request)
-    processor.exec(context)
-    respond(apiMapper.encodeToString(context.toTransportUpdate()))
+suspend fun ApplicationCall.updateNote(appSettings: TnAppSettings, logger: ITnLogWrapper) {
+    process<NoteUpdateRequest, NoteUpdateResponse>(appSettings, logger, "note-update", TnCommand.UPDATE)
 }
 
-suspend fun ApplicationCall.deleteNote(processor: NoteProcessor) {
-    val request = apiMapper.decodeFromString<NoteDeleteRequest>(receiveText())
-    val context = TnContext()
-    context.fromTransport(request)
-    processor.exec(context)
-    respond(apiMapper.encodeToString(context.toTransportDelete()))
+suspend fun ApplicationCall.deleteNote(appSettings: TnAppSettings, logger: ITnLogWrapper) {
+    process<NoteDeleteRequest, NoteDeleteResponse>(appSettings, logger, "note-delete", TnCommand.DELETE)
 }
 
-suspend fun ApplicationCall.searchNote(processor: NoteProcessor) {
-    val request = apiMapper.decodeFromString<NoteSearchRequest>(receiveText())
-    val context = TnContext()
-    context.fromTransport(request)
-    processor.exec(context)
-    respond(apiMapper.encodeToString(context.toTransportSearch()))
+suspend fun ApplicationCall.searchNote(appSettings: TnAppSettings, logger: ITnLogWrapper) {
+    process<NoteSearchRequest, NoteSearchResponse>(appSettings, logger, "note-search", TnCommand.SEARCH)
 }

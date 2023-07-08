@@ -7,14 +7,15 @@ import io.ktor.server.engine.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.routing.*
 import ru.otus.tigernotes.api.apiMapper
+import ru.otus.tigernotes.app.plugins.initAppSettings
 
-fun Application.module(processor: NoteProcessor = NoteProcessor()) {
+fun Application.module(appSettings: TnAppSettings = initAppSettings()) {
     routing {
         route("app") {
             install(ContentNegotiation) {
                 json(apiMapper)
             }
-            note(processor)
+            note(appSettings)
         }
     }
 }

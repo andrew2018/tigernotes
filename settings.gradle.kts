@@ -27,3 +27,6 @@ include("tn-stubs")
 
 include("tn-app-ktor")
 include("tn-app-kafka")
+
+include("tn-lib-logging-common")
+include("tn-lib-logging-kermit")

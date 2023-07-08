@@ -18,6 +18,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:atomicfu:$atomicfuVersion")
 
     // log
+    implementation(project(":tn-lib-logging-kermit"))
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.github.microutils:kotlin-logging-jvm:$kotlinLoggingJvmVersion")
 

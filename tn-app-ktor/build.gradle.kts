@@ -41,8 +41,6 @@ kotlin {
     jvm {
         withJava()
     }
-    linuxX64 {}
-    macosX64 {}
 
     targets.withType<KotlinNativeTarget> {
         binaries {
@@ -70,12 +68,15 @@ kotlin {
                 implementation(ktor("auth")) // "io.ktor:ktor-auth:$ktorVersion"
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
-
                 implementation(project(":tn-common"))
                 implementation(project(":tn-app-biz"))
 
                 implementation(project(":tn-api-kmp"))
                 implementation(project(":tn-mappers"))
+
+                implementation(project(":tn-repo-in-memory"))
+                implementation(project(":tn-repo-stubs"))
+                implementation(project(":tn-repo-postgresql"))
 
                 implementation(project(":tn-lib-logging-kermit"))
 
@@ -91,6 +92,8 @@ kotlin {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+
+                implementation(project(":tn-repo-tests"))
 
                 implementation(ktor("test-host"))
                 implementation(ktor("content-negotiation", prefix = "client-"))

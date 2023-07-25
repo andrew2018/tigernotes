@@ -18,6 +18,7 @@ kotlin {
                 implementation("com.crowdproj:kotlin-cor:$crowdprojCorVersion")
 
                 implementation(project(":tn-common"))
+                implementation(project(":tn-repo-in-memory"))
                 implementation(project(":tn-stubs"))
             }
         }
@@ -27,7 +28,8 @@ kotlin {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
 
-                implementation(project(":tn-mappers"))
+                implementation(project(":tn-repo-tests"))
+                implementation(project(":tn-repo-stubs"))
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
             }
         }

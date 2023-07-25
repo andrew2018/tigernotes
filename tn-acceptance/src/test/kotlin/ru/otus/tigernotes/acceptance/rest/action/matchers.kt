@@ -49,3 +49,11 @@ val beValidId = Matcher<String?> {
         { "id should be null" },
     )
 }
+
+val beValidLock = Matcher<String?> {
+    MatcherResult(
+        it != null,
+        { "lock should not be null" },
+        { "lock should be null" },
+    )
+}

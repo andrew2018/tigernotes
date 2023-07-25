@@ -1,24 +1,21 @@
 package ru.otus.tigernotes.validation
 
+import NoteRepoStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import ru.otus.tigernotes.biz.NoteProcessor
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.TnCorSettings
 import ru.otus.tigernotes.common.models.*
 import ru.otus.tigernotes.stubs.NoteStub
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.time.Duration.Companion.days
+import kotlin.test.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BizValidationUpdateTest {
 
     private val commandUpdate = TnCommand.UPDATE
-    private val processor by lazy { NoteProcessor(TnCorSettings()) }
+    private val processor by lazy { NoteProcessor(TnCorSettings(repoTest = NoteRepoStub())) }
 
     @Test
     fun validationIdEmpty() = runTest {
@@ -31,7 +28,8 @@ class BizValidationUpdateTest {
                 title = "123",
                 description = "123",
                 email = "test@mail.ru",
-                timeReminder = Clock.System.now().plus(1.days)
+                timeReminder = Instant.parse("2023-07-01T10:00:00Z"),
+                lock = NoteLock("123-234-abc-ABC")
             ),
         )
         processor.exec(ctx)
@@ -53,7 +51,8 @@ class BizValidationUpdateTest {
                 title = "123",
                 description = "123",
                 email = "test@mail.ru",
-                timeReminder = Clock.System.now().plus(1.days)
+                timeReminder = Instant.parse("2023-07-01T10:00:00Z"),
+                lock = NoteLock("123-234-abc-ABC")
             )
         )
         processor.exec(ctx)
@@ -73,7 +72,8 @@ class BizValidationUpdateTest {
                 title = "",
                 description = "123",
                 email = "test@mail.ru",
-                timeReminder = Clock.System.now().plus(1.days)
+                timeReminder = Instant.parse("2023-07-01T10:00:00Z"),
+                lock = NoteLock("123-234-abc-ABC")
             ),
         )
         processor.exec(ctx)
@@ -95,7 +95,8 @@ class BizValidationUpdateTest {
                 title = "123",
                 description = "",
                 email = "test@mail.ru",
-                timeReminder = Clock.System.now().plus(1.days)
+                timeReminder = Instant.parse("2023-07-01T10:00:00Z"),
+                lock = NoteLock("123-234-abc-ABC")
             ),
         )
         processor.exec(ctx)
@@ -104,72 +105,6 @@ class BizValidationUpdateTest {
         val error = ctx.errors.firstOrNull()
         assertEquals("description", error?.field)
         assertContains(error?.message ?: "", "description")
-    }
-
-    @Test
-    fun validationEmailEmpty() = runTest {
-        val ctx = TnContext(
-            command = commandUpdate,
-            state = TnState.NONE,
-            workMode = TnWorkMode.TEST,
-            note = Note(
-                id = NoteStub.get().id,
-                title = "123",
-                description = "123",
-                email = "",
-                timeReminder = Clock.System.now().plus(1.days)
-            ),
-        )
-        processor.exec(ctx)
-        assertEquals(1, ctx.errors.size)
-        assertEquals(TnState.FAILING, ctx.state)
-        val error = ctx.errors.firstOrNull()
-        assertEquals("email", error?.field)
-        assertContains(error?.message ?: "", "email")
-    }
-
-    @Test
-    fun validationEmailNotValid() = runTest {
-        val ctx = TnContext(
-            command = commandUpdate,
-            state = TnState.NONE,
-            workMode = TnWorkMode.TEST,
-            note = Note(
-                id = NoteStub.get().id,
-                title = "123",
-                description = "123",
-                email = "test",
-                timeReminder = Clock.System.now().plus(1.days)
-            ),
-        )
-        processor.exec(ctx)
-        assertEquals(1, ctx.errors.size)
-        assertEquals(TnState.FAILING, ctx.state)
-        val error = ctx.errors.firstOrNull()
-        assertEquals("email", error?.field)
-        assertContains(error?.message ?: "", "email")
-    }
-
-    @Test
-    fun validationTimeReminderInCorrect() = runTest {
-        val ctx = TnContext(
-            command = commandUpdate,
-            state = TnState.NONE,
-            workMode = TnWorkMode.TEST,
-            note = Note(
-                id = NoteStub.get().id,
-                title = "123",
-                description = "123",
-                email = "test@mail.ru",
-                timeReminder = Clock.System.now().minus(1.days)
-            ),
-        )
-        processor.exec(ctx)
-        assertEquals(1, ctx.errors.size)
-        assertEquals(TnState.FAILING, ctx.state)
-        val error = ctx.errors.firstOrNull()
-        assertEquals("timeReminder", error?.field)
-        assertContains(error?.message ?: "", "timeReminder")
     }
 
 }

@@ -56,7 +56,7 @@ class RequestSerializationTest {
             mode = NoteRequestDebugMode.STUB,
             stub = NoteRequestDebugStubs.BAD_TITLE
         ),
-        noteId = "123"
+        noteDelete = NoteDeleteObject(id = "123")
     )
 
     private val searchRequest : IRequest = NoteSearchRequest(
@@ -96,7 +96,7 @@ class RequestSerializationTest {
         assertContains(updateJson, Regex("\"id\":\\s*\"456\""))
 
         val deleteJson = apiMapper.encodeToString(deleteRequest)
-        assertContains(deleteJson, Regex("\"noteId\":\\s*\"123\""))
+        assertContains(deleteJson, Regex("\"id\":\\s*\"123\""))
         assertContains(deleteJson, Regex("\"mode\":\\s*\"stub\""))
         assertContains(deleteJson, Regex("\"stub\":\\s*\"badTitle\""))
         assertContains(deleteJson, Regex("\"requestType\":\\s*\"delete\""))

@@ -1,7 +1,8 @@
 package ru.otus.tigernotes.biz
 
 import com.crowdproj.kotlin.cor.rootChain
-import ru.otus.tigernotes.biz.groups.*
+import ru.otus.tigernotes.biz.general.initRepo
+import ru.otus.tigernotes.biz.operations.*
 import ru.otus.tigernotes.biz.workers.*
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.TnCorSettings
@@ -13,6 +14,7 @@ class NoteProcessor(val settings: TnCorSettings) {
     companion object {
         private val BusinessChain = rootChain {
             initStatus("Инициализация статуса")
+            initRepo("Инициализация репозитория")
             createOperation("Создание заявки", TnCommand.CREATE)
             readOperation("Получить заявку", TnCommand.READ)
             updateOperation("Изменить заявку", TnCommand.UPDATE)

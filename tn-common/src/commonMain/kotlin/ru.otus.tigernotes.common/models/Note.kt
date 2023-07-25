@@ -9,5 +9,12 @@ data class Note(
     var description: String = "",
     var timeCreate: Instant = Instant.NONE,
     var email: String = "",
-    var timeReminder: Instant = Instant.NONE
-)
+    var timeReminder: Instant = Instant.NONE,
+    var lock: NoteLock = NoteLock.NONE,
+) {
+    fun isEmpty() = this == NONE
+
+    companion object {
+        val NONE = Note()
+    }
+}

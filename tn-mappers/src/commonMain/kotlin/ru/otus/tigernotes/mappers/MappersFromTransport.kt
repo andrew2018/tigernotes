@@ -21,6 +21,7 @@ fun TnContext.fromTransport(request: IRequest) = when (request) {
 }
 
 private fun String?.toNoteId() = this?.let { NoteId(it) } ?: NoteId.NONE
+private fun String?.toNoteLock() = this?.let { NoteLock(it) } ?: NoteLock.NONE
 private fun String?.toNoteWithId() = Note(id = this.toNoteId())
 private fun IRequest?.requestId() = this?.requestId?.let { TnRequestId(it) } ?: TnRequestId.NONE
 
@@ -73,7 +74,7 @@ fun TnContext.fromTransport(request: NoteUpdateRequest) {
 fun TnContext.fromTransport(request: NoteDeleteRequest) {
     command = TnCommand.DELETE
     requestId = request.requestId()
-    note = request.noteId.toNoteWithId()
+    note = request.noteDelete.toInternal()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
@@ -106,5 +107,15 @@ private fun NoteUpdateObject.toInternal(): Note = Note(
     description = this.description ?: "",
     timeCreate = this.timeCreate?.toInstant() ?: Instant.NONE,
     email = this.email ?: "",
-    timeReminder = this.timeReminder?.toInstant() ?: Instant.NONE
+    timeReminder = this.timeReminder?.toInstant() ?: Instant.NONE,
+    lock = this.lock.toNoteLock(),
 )
+
+private fun NoteDeleteObject?.toInternal(): Note = if (this != null) {
+    Note(
+        id = id.toNoteId(),
+        lock = lock.toNoteLock(),
+    )
+} else {
+    Note.NONE
+}

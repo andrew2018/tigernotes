@@ -30,3 +30,7 @@ include("tn-app-kafka")
 
 include("tn-lib-logging-common")
 include("tn-lib-logging-kermit")
+include("tn-repo-in-memory")
+include("tn-repo-stubs")
+include("tn-repo-tests")
+include("tn-repo-postgresql")

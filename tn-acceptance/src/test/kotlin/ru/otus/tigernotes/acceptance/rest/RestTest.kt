@@ -10,6 +10,7 @@ import ru.otus.tigernotes.acceptance.fixture.docker.DockerCompose
 open class AccRestTestBase(dockerCompose: DockerCompose) : BaseFunSpec(dockerCompose, {
     val restClient = RestClient(dockerCompose)
     testApiNote(restClient, "rest ")
+    testStubApiNote(restClient, "rest ")
 })
 
 class AccRestKtorTest : AccRestTestBase(KtorDockerCompose)

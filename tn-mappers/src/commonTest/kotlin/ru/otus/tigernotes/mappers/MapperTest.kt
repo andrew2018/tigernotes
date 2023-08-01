@@ -140,7 +140,8 @@ class MapperTest {
                 description = "desc",
                 timeCreate = "2023-04-01T11:00:00Z",
                 email = "email",
-                timeReminder = "2023-04-01T12:00:00Z"
+                timeReminder = "2023-04-01T12:00:00Z",
+                lock = "456789"
             ),
         )
 
@@ -151,6 +152,7 @@ class MapperTest {
         assertEquals(TnStubs.SUCCESS, context.stubCase)
         assertEquals(TnWorkMode.STUB, context.workMode)
         assertEquals("456", context.note.id.asString())
+        assertEquals("456789", context.note.lock.asString())
         assertEquals("title", context.note.title)
         assertEquals("desc", context.note.description)
         assertEquals(Instant.parse("2023-04-01T11:00:00Z"), context.note.timeCreate)
@@ -169,7 +171,8 @@ class MapperTest {
                 description = "desc",
                 timeCreate = Instant.parse("2023-04-01T11:00:00Z"),
                 email = "email",
-                timeReminder = Instant.parse("2023-04-01T12:00:00Z")
+                timeReminder = Instant.parse("2023-04-01T12:00:00Z"),
+                lock = NoteLock("456789")
             ),
             state = TnState.FINISHING,
         )
@@ -178,6 +181,7 @@ class MapperTest {
 
         assertEquals("1234", req.requestId)
         assertEquals("456", req.note?.id)
+        assertEquals("456789", req.note?.lock)
         assertEquals("title", req.note?.title)
         assertEquals("desc", req.note?.description)
         assertEquals("2023-04-01T11:00:00Z", req.note?.timeCreate)
@@ -194,7 +198,10 @@ class MapperTest {
                 mode = NoteRequestDebugMode.STUB,
                 stub = NoteRequestDebugStubs.SUCCESS,
             ),
-            noteId = "456"
+            noteDelete = NoteDeleteObject(
+                id = "456",
+                lock = "456789"
+            )
         )
 
         val context = TnContext()
@@ -203,6 +210,7 @@ class MapperTest {
         assertEquals(TnStubs.SUCCESS, context.stubCase)
         assertEquals(TnWorkMode.STUB, context.workMode)
         assertEquals("456", context.note.id.asString())
+        assertEquals("456789", context.note.lock.asString())
     }
 
     @Test
@@ -216,7 +224,8 @@ class MapperTest {
                 description = "desc",
                 timeCreate = Instant.parse("2023-04-01T11:00:00Z"),
                 email = "email",
-                timeReminder = Instant.parse("2023-04-01T12:00:00Z")
+                timeReminder = Instant.parse("2023-04-01T12:00:00Z"),
+                lock = NoteLock("456789")
             ),
             state = TnState.FINISHING,
         )
@@ -225,6 +234,7 @@ class MapperTest {
 
         assertEquals("1234", req.requestId)
         assertEquals("456", req.note?.id)
+        assertEquals("456789", req.note?.lock)
         assertEquals("title", req.note?.title)
         assertEquals("desc", req.note?.description)
         assertEquals("2023-04-01T11:00:00Z", req.note?.timeCreate)

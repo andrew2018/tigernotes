@@ -6,13 +6,10 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import ru.otus.tigernotes.acceptance.fixture.client.Client
-import ru.otus.tigernotes.api.models.NoteResponseObject
-import ru.otus.tigernotes.api.models.NoteUpdateObject
-import ru.otus.tigernotes.api.models.NoteUpdateRequest
-import ru.otus.tigernotes.api.models.NoteUpdateResponse
+import ru.otus.tigernotes.api.models.*
 
-suspend fun Client.updateNote(id: String?, note: NoteUpdateObject): NoteResponseObject =
-    updateNote(id, note) {
+suspend fun Client.updateNote(id: String?, lock: String?, note: NoteUpdateObject, mode: NoteDebug = debug): NoteResponseObject =
+    updateNote(id, lock, note, mode) {
         it should haveSuccessResult
         it.note shouldNotBe null
         it.note?.apply {
@@ -20,8 +17,6 @@ suspend fun Client.updateNote(id: String?, note: NoteUpdateObject): NoteResponse
                 title shouldBe note.title
             if (note.description != null)
                 description shouldBe note.description
-            if (note.timeCreate != null)
-                timeCreate shouldBe note.timeCreate
             if (note.email != null)
                 email shouldBe note.email
             if (note.timeReminder != null)
@@ -30,15 +25,16 @@ suspend fun Client.updateNote(id: String?, note: NoteUpdateObject): NoteResponse
         it.note!!
     }
 
-suspend fun <T> Client.updateNote(id: String?, note: NoteUpdateObject, block: (NoteUpdateResponse) -> T): T =
-    withClue("updatedNote: $id, set: $note") {
+suspend fun <T> Client.updateNote(id: String?, lock: String?, note: NoteUpdateObject, mode: NoteDebug = debug, block: (NoteUpdateResponse) -> T): T =
+    withClue("updatedNote: $id, lock: $lock, set: $note") {
         id should beValidId
+        lock should beValidLock
 
         val response = sendAndReceive(
             "/app/note/update", NoteUpdateRequest(
                 requestType = "update",
-                debug = debug,
-                noteUpdate = note.copy(id = id)
+                debug = mode,
+                noteUpdate = note.copy(id = id, lock = lock)
             )
         ) as NoteUpdateResponse
 

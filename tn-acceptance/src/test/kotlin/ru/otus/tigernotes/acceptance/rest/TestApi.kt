@@ -4,56 +4,66 @@ import io.kotest.assertions.asClue
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldExist
-import io.kotest.matchers.collections.shouldExistInOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import ru.otus.tigernotes.acceptance.fixture.client.Client
 import ru.otus.tigernotes.acceptance.rest.action.*
 import ru.otus.tigernotes.api.models.NoteSearchFilter
 import ru.otus.tigernotes.api.models.NoteUpdateObject
+import java.time.LocalDate
 
-fun FunSpec.testApiNote(client: Client, prefix: String = "") {
+fun FunSpec.testStubApiNote(client: Client, prefix: String = "") {
     context(prefix) {
         test("Create Note ok") {
-            client.createNote()
+            client.createNote(mode = prod)
         }
 
         test("Read Note ok") {
-            val created = client.createNote()
-            client.readNote(created.id).asClue {
-                it shouldBe created
+            val created = client.createNote(mode = prod)
+            client.readNote(created.id, mode = prod).asClue {
+                it.id shouldBe created.id
             }
         }
 
         test("Update Note ok") {
-            val created = client.createNote()
-            client.updateNote(created.id, NoteUpdateObject(title = "Заметка 1"))
-            client.readNote(created.id) {
-                it.note shouldBe created
+            val created = client.createNote(mode = prod)
+            client.updateNote(created.id, created.lock, NoteUpdateObject(
+                title = "Заметка New",
+                description = "Описание New"), mode = prod)
+            client.readNote(created.id, mode = prod) {
+                it.note?.id shouldBe created.id
+                it.note?.title shouldBe "Заметка New"
+                it.note?.description shouldBe "Описание New"
             }
         }
 
         test("Delete Note ok") {
-            val created = client.createNote()
-            client.deleteNote(created.id)
-//            client.readNote(created.id) {
-//                // it should haveError("not-found")
-//            }
+            val created = client.createNote(mode = prod)
+            client.deleteNote(created.id, created.lock, mode = prod)
+            client.readNote(created.id, mode = prod) {
+                 it should haveError("not-found")
+            }
         }
 
         test("Search Note ok") {
-            val created1 = client.createNote(someCreateNote.copy(title = "Заметка 1"))
+            client.createNote(someCreateNote.copy(title = "Заметка для поиска 1"), mode = prod)
+            client.createNote(someCreateNote.copy(title = "Заметка для поиска 2"), mode = prod)
 
             withClue("Search by Title") {
-                val results = client.searchNote(search = NoteSearchFilter(title = "title", dateStart = null, dateEnd = null))
-                 results shouldHaveSize 6
-                 results shouldExist { it.title == "title 123-01" }
+                val results = client.searchNote(search = NoteSearchFilter(title = "Заметка для поиска 1", dateStart = null, dateEnd = null), mode = prod)
+                 results shouldHaveSize 1
+                 results shouldExist { it.title == "Заметка для поиска 1" }
             }
 
             withClue("Search by Date") {
-                val results = client.searchNote(search = NoteSearchFilter(title = null, dateStart = "2023-04-01", dateEnd = "2023-05-01"))
-                results shouldHaveSize 6
-                results shouldExist { it.title == " 123-01" }
+                val results = client.searchNote(search = NoteSearchFilter(
+                    title = "Заметка для поиска",
+                    dateStart = LocalDate.now().minusDays(1).toString(),
+                    dateEnd = LocalDate.now().plusDays(1).toString()), mode = prod)
+                results shouldHaveSize 2
+                results shouldExist { it.title == "Заметка для поиска 1" }
+                results shouldExist { it.title == "Заметка для поиска 2" }
             }
         }
     }

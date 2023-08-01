@@ -3,6 +3,7 @@ package ru.otus.tigernotes.common
 import kotlinx.datetime.Instant
 import ru.otus.tigernotes.common.stubs.TnStubs
 import ru.otus.tigernotes.common.models.*
+import ru.otus.tigernotes.common.repo.INoteRepository
 
 data class TnContext(
     var command: TnCommand = TnCommand.NONE,
@@ -26,4 +27,10 @@ data class TnContext(
 
     var noteResponse: Note = Note(),
     var notesResponse: MutableList<Note> = mutableListOf(),
+
+    var noteRepo: INoteRepository = INoteRepository.NONE,
+    var noteRepoPrepare: Note = Note(),
+    var noteRepoRead: Note = Note(),
+    var noteRepoDone: Note = Note(),
+    var notesRepoDone: MutableList<Note> = mutableListOf(),
 )

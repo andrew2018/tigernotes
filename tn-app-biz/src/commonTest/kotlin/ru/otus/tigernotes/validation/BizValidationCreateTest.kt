@@ -1,11 +1,10 @@
 package ru.otus.tigernotes.validation
 
+import NoteRepoStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import ru.otus.tigernotes.biz.NoteProcessor
-import ru.otus.tigernotes.common.NONE
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.TnCorSettings
 import ru.otus.tigernotes.common.models.Note
@@ -17,13 +16,12 @@ import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
-import kotlin.time.Duration.Companion.days
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BizValidationCreateTest {
 
     private val commandCreate = TnCommand.CREATE
-    private val processor by lazy { NoteProcessor(TnCorSettings()) }
+    private val processor by lazy { NoteProcessor(TnCorSettings(repoTest = NoteRepoStub())) }
 
     @Test
     fun validationTitleCorrect() = runTest {
@@ -36,7 +34,7 @@ class BizValidationCreateTest {
                 title = "123",
                 description = "123",
                 email = "test@mail.ru",
-                timeReminder = Clock.System.now().plus(1.days)
+                timeReminder = Instant.parse("2023-07-01T10:00:00Z")
             )
         )
         processor.exec(ctx)
@@ -56,7 +54,7 @@ class BizValidationCreateTest {
                 title = "",
                 description = "123",
                 email = "test@mail.ru",
-                timeReminder = Clock.System.now().plus(1.days)
+                timeReminder = Instant.parse("2023-07-01T10:00:00Z")
             ),
         )
         processor.exec(ctx)
@@ -78,7 +76,7 @@ class BizValidationCreateTest {
                 title = "123",
                 description = "",
                 email = "test@mail.ru",
-                timeReminder = Clock.System.now().plus(1.days)
+                timeReminder = Instant.parse("2023-07-01T10:00:00Z")
             ),
         )
         processor.exec(ctx)
@@ -100,7 +98,7 @@ class BizValidationCreateTest {
                 title = "123",
                 description = "123",
                 email = "",
-                timeReminder = Clock.System.now().plus(1.days)
+                timeReminder = Instant.parse("2023-07-01T10:00:00Z")
             ),
         )
         processor.exec(ctx)
@@ -122,7 +120,7 @@ class BizValidationCreateTest {
                 title = "123",
                 description = "123",
                 email = "test",
-                timeReminder = Clock.System.now().plus(1.days)
+                timeReminder = Instant.parse("2023-07-01T10:00:00Z")
             ),
         )
         processor.exec(ctx)
@@ -131,28 +129,6 @@ class BizValidationCreateTest {
         val error = ctx.errors.firstOrNull()
         assertEquals("email", error?.field)
         assertContains(error?.message ?: "", "email")
-    }
-
-    @Test
-    fun validationTimeReminderInCorrect() = runTest {
-        val ctx = TnContext(
-            command = commandCreate,
-            state = TnState.NONE,
-            workMode = TnWorkMode.TEST,
-            note = Note(
-                id = NoteStub.get().id,
-                title = "123",
-                description = "123",
-                email = "test@mail.ru",
-                timeReminder = Clock.System.now().minus(1.days)
-            ),
-        )
-        processor.exec(ctx)
-        assertEquals(1, ctx.errors.size)
-        assertEquals(TnState.FAILING, ctx.state)
-        val error = ctx.errors.firstOrNull()
-        assertEquals("timeReminder", error?.field)
-        assertContains(error?.message ?: "", "timeReminder")
     }
 
 }

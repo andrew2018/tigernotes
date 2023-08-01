@@ -180,6 +180,9 @@ components:
     NoteId:
       type: string
       description: Идентификатор заметки
+    NoteLock:
+      type: string
+      description: Версия оптимистичной блокировки
 
     NoteObject:
       type: object
@@ -200,6 +203,8 @@ components:
         timeReminder:
           type: string
           description: Время напоминания
+        lock:
+          $ref: '#/components/schemas/NoteLock'
 
     NoteCreateRequest:
       allOf:
@@ -226,6 +231,8 @@ components:
           properties:
             id:
               $ref: '#/components/schemas/NoteId'
+            lock:
+              $ref: '#/components/schemas/NoteLock'
 
     NoteUpdateRequest:
       allOf:
@@ -236,14 +243,23 @@ components:
             noteUpdate:
               $ref: '#/components/schemas/NoteUpdateObject'
 
+    NoteDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/NoteId'
+            lock:
+              $ref: '#/components/schemas/NoteLock'
+
     NoteDeleteRequest:
       allOf:
         - $ref: '#/components/schemas/IRequest'
         - $ref: '#/components/schemas/NoteRequestDebug'
         - type: object
           properties:
-            noteId:
-              $ref: '#/components/schemas/NoteId'
+            noteDelete:
+              $ref: '#/components/schemas/NoteDeleteObject'
 
     NoteSearchFilter:
       type: object
@@ -276,6 +292,8 @@ components:
           properties:
             id:
               $ref: '#/components/schemas/NoteId'
+            lock:
+              $ref: '#/components/schemas/NoteLock'
 
     NoteResponseSingle:
       allOf:

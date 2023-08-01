@@ -8,6 +8,7 @@ import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.helpers.errorValidation
 import ru.otus.tigernotes.common.helpers.fail
 import ru.otus.tigernotes.common.models.NoteId
+import ru.otus.tigernotes.common.models.NoteLock
 
 fun ICorAddExecDsl<TnContext>.validateIdNotEmpty(title: String) = worker {
     this.title = title
@@ -80,27 +81,13 @@ fun ICorAddExecDsl<TnContext>.validateEmailValid(title: String) = worker {
     }
 }
 
-fun ICorAddExecDsl<TnContext>.validateTimeReminderCorrect(title: String) = worker {
+fun ICorAddExecDsl<TnContext>.validateLockNotEmpty(title: String) = worker {
     this.title = title
-    on { noteValidating.timeReminder < Clock.System.now() }
+    on { noteValidating.lock.asString().isEmpty() }
     handle {
         fail(
             errorValidation(
-                field = "timeReminder",
-                violationCode = "correct",
-                description = "field must be more current"
-            )
-        )
-    }
-}
-
-fun ICorAddExecDsl<TnContext>.validateSearchTitleNotEmpty(title: String) = worker {
-    this.title = title
-    on { noteFilterValidating.searchTitle.isEmpty() }
-    handle {
-        fail(
-            errorValidation(
-                field = "searchTitle",
+                field = "lock",
                 violationCode = "empty",
                 description = "field must not be empty"
             )
@@ -108,30 +95,19 @@ fun ICorAddExecDsl<TnContext>.validateSearchTitleNotEmpty(title: String) = worke
     }
 }
 
-fun ICorAddExecDsl<TnContext>.validateDateStartNotNone(title: String) = worker {
+fun ICorAddExecDsl<TnContext>.validateLockProperFormat(title: String) = worker {
     this.title = title
-    on { noteFilterValidating.dateStart == LocalDate.NONE }
+    val regExp = Regex("^[0-9a-zA-Z-]+$")
+    on { noteValidating.lock != NoteLock.NONE && !noteValidating.lock.asString().matches(regExp) }
     handle {
+        val encodedId = noteValidating.lock.asString()
         fail(
             errorValidation(
-                field = "dateStart",
-                violationCode = "none",
-                description = "field must not be none"
+                field = "lock",
+                violationCode = "badFormat",
+                description = "value $encodedId must contain only"
             )
         )
     }
 }
 
-fun ICorAddExecDsl<TnContext>.validateDateEndNotNone(title: String) = worker {
-    this.title = title
-    on { noteFilterValidating.dateEnd == LocalDate.NONE }
-    handle {
-        fail(
-            errorValidation(
-                field = "dateEnd",
-                violationCode = "none",
-                description = "field must not be none"
-            )
-        )
-    }
-}

@@ -3,6 +3,8 @@ package ru.otus.tigernotes.common
 import kotlinx.datetime.Instant
 import ru.otus.tigernotes.common.stubs.TnStubs
 import ru.otus.tigernotes.common.models.*
+import ru.otus.tigernotes.common.permissions.TnPrincipalModel
+import ru.otus.tigernotes.common.permissions.TnUserPermissions
 import ru.otus.tigernotes.common.repo.INoteRepository
 
 data class TnContext(
@@ -13,6 +15,10 @@ data class TnContext(
 
     var workMode: TnWorkMode = TnWorkMode.PROD,
     var stubCase: TnStubs = TnStubs.NONE,
+
+    var principal: TnPrincipalModel = TnPrincipalModel.NONE,
+    val permissionsChain: MutableSet<TnUserPermissions> = mutableSetOf(),
+    var permitted: Boolean = false,
 
     var requestId: TnRequestId = TnRequestId.NONE,
     var timeStart: Instant = Instant.NONE,

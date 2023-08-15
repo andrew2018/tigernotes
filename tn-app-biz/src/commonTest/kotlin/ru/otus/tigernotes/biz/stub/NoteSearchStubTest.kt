@@ -1,7 +1,9 @@
-package ru.otus.tigernotes.biz
+package ru.otus.tigernotes.biz.stub
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalDate
+import ru.otus.tigernotes.biz.NoteProcessor
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.TnCorSettings
 import ru.otus.tigernotes.common.models.*
@@ -9,44 +11,69 @@ import ru.otus.tigernotes.common.stubs.TnStubs
 import ru.otus.tigernotes.stubs.NoteStub
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.test.fail
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class NoteReadStubTest {
+class NoteSearchStubTest {
 
     private val processor = NoteProcessor(TnCorSettings())
-    val id = NoteId("123")
+    val filter = NoteFilter(searchTitle = "123-01", dateStart = LocalDate.parse("2023-04-01"), dateEnd = LocalDate.parse("2023-05-01"))
 
     @Test
-    fun read() = runTest {
+    fun search() = runTest {
 
         val ctx = TnContext(
-            command = TnCommand.READ,
+            command = TnCommand.SEARCH,
             state = TnState.NONE,
             workMode = TnWorkMode.STUB,
             stubCase = TnStubs.SUCCESS,
-            note = Note(
-                id = id,
+            noteFilter = filter,
+        )
+        processor.exec(ctx)
+        assertTrue(ctx.notesResponse.size > 1)
+        val first = ctx.notesResponse.firstOrNull() ?: fail("Empty response list")
+        assertTrue(first.title.contains(filter.searchTitle))
+        assertTrue(first.description.contains(filter.searchTitle))
+        assertTrue(first.email.contains(filter.searchTitle))
+        with (NoteStub.get()) {
+            assertEquals(timeCreate, first.timeCreate)
+            assertEquals(timeReminder, first.timeReminder)
+        }
+    }
+
+    @Test
+    fun badSearchTitle() = runTest {
+
+        val ctx = TnContext(
+            command = TnCommand.SEARCH,
+            state = TnState.NONE,
+            workMode = TnWorkMode.STUB,
+            stubCase = TnStubs.SUCCESS,
+            noteFilter = NoteFilter(
+                searchTitle = ""
             ),
         )
         processor.exec(ctx)
+        assertTrue(ctx.notesResponse.size > 1)
+        val first = ctx.notesResponse.firstOrNull() ?: fail("Empty response list")
+        assertTrue(first.title.contains(filter.searchTitle))
+        assertTrue(first.description.contains(filter.searchTitle))
+        assertTrue(first.email.contains(filter.searchTitle))
         with (NoteStub.get()) {
-            assertEquals(id, ctx.noteResponse.id)
-            assertEquals(title, ctx.noteResponse.title)
-            assertEquals(description, ctx.noteResponse.description)
-            assertEquals(timeCreate, ctx.noteResponse.timeCreate)
-            assertEquals(email, ctx.noteResponse.email)
-            assertEquals(timeReminder, ctx.noteResponse.timeReminder)
+            assertEquals(timeCreate, first.timeCreate)
+            assertEquals(timeReminder, first.timeReminder)
         }
     }
 
     @Test
     fun badId() = runTest {
         val ctx = TnContext(
-            command = TnCommand.READ,
+            command = TnCommand.SEARCH,
             state = TnState.NONE,
             workMode = TnWorkMode.STUB,
             stubCase = TnStubs.BAD_ID,
-            note = Note(),
+            noteFilter = filter,
         )
         processor.exec(ctx)
         assertEquals(Note(), ctx.noteResponse)
@@ -58,13 +85,11 @@ class NoteReadStubTest {
     @Test
     fun databaseError() = runTest {
         val ctx = TnContext(
-            command = TnCommand.READ,
+            command = TnCommand.SEARCH,
             state = TnState.NONE,
             workMode = TnWorkMode.STUB,
             stubCase = TnStubs.DB_ERROR,
-            note = Note(
-                id = id,
-            ),
+            noteFilter = filter,
         )
         processor.exec(ctx)
         assertEquals(Note(), ctx.noteResponse)
@@ -75,13 +100,11 @@ class NoteReadStubTest {
     @Test
     fun badNoCase() = runTest {
         val ctx = TnContext(
-            command = TnCommand.READ,
+            command = TnCommand.SEARCH,
             state = TnState.NONE,
             workMode = TnWorkMode.STUB,
             stubCase = TnStubs.BAD_TITLE,
-            note = Note(
-                id = id,
-            ),
+            noteFilter = filter,
         )
         processor.exec(ctx)
         assertEquals(Note(), ctx.noteResponse)

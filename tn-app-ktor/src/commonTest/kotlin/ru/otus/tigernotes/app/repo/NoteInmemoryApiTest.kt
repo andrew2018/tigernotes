@@ -9,11 +9,25 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import ru.otus.tigernotes.api.apiMapper
 import ru.otus.tigernotes.api.models.*
+import ru.otus.tigernotes.app.auth.addAuth
+import ru.otus.tigernotes.app.config.KtorAuthConfig
+import ru.otus.tigernotes.common.models.NoteId
+import ru.otus.tigernotes.common.models.NoteLock
+import ru.otus.tigernotes.stubs.NoteStub
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
 class NoteInmemoryApiTest {
+    private val uuid = "10000000-0000-0000-0000-000000000001"
+
+    private val initNote = NoteStub.prepareResult {
+        id = NoteId(uuid)
+        title = "abc"
+        description = "abc"
+        lock = NoteLock(uuid)
+    }
+    private val userId = initNote.ownerId
 
     private val createNote = NoteObject(
         title = "Заметка",
@@ -52,6 +66,7 @@ class NoteInmemoryApiTest {
                     mode = NoteRequestDebugMode.TEST,
                 )
             )
+            addAuth(id = userId.asString(), config = KtorAuthConfig.TEST)
             contentType(ContentType.Application.Json)
             val requestJson = apiMapper.encodeToString(requestObj)
             setBody(requestJson)
@@ -82,6 +97,7 @@ class NoteInmemoryApiTest {
                     mode = NoteRequestDebugMode.TEST,
                 )
             )
+            addAuth(id = userId.asString(), config = KtorAuthConfig.TEST)
             contentType(ContentType.Application.Json)
             val requestJson = apiMapper.encodeToString(requestObj)
             setBody(requestJson)
@@ -109,6 +125,7 @@ class NoteInmemoryApiTest {
                     mode = NoteRequestDebugMode.TEST,
                 )
             )
+            addAuth(id = userId.asString(), config = KtorAuthConfig.TEST)
             contentType(ContentType.Application.Json)
             val requestJson = apiMapper.encodeToString(requestObj)
             setBody(requestJson)
@@ -130,6 +147,7 @@ class NoteInmemoryApiTest {
                     mode = NoteRequestDebugMode.TEST,
                 )
             )
+            addAuth(id = userId.asString(), config = KtorAuthConfig.TEST)
             contentType(ContentType.Application.Json)
             val requestJson = apiMapper.encodeToString(requestObj)
             setBody(requestJson)
@@ -144,6 +162,7 @@ class NoteInmemoryApiTest {
     private suspend fun initObject(client: HttpClient): NoteCreateResponse {
         val response = client.post("/app/note/create") {
             contentType(ContentType.Application.Json)
+            addAuth(id = userId.asString(), config = KtorAuthConfig.TEST)
             val requestJson = apiMapper.encodeToString(requestObj)
             setBody(requestJson)
         }

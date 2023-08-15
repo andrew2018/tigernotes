@@ -1,7 +1,8 @@
-package ru.otus.tigernotes.biz
+package ru.otus.tigernotes.biz.stub
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import ru.otus.tigernotes.biz.NoteProcessor
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.TnCorSettings
 import ru.otus.tigernotes.common.models.*

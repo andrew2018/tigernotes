@@ -15,7 +15,7 @@ pluginManagement {
 }
 
 // include("m1l1-hello")
-include("tn-acceptance")
+// include("tn-acceptance")
 
 include("tn-api-kmp")
 
@@ -34,3 +34,4 @@ include("tn-repo-in-memory")
 include("tn-repo-stubs")
 include("tn-repo-tests")
 include("tn-repo-postgresql")
+include("tn-app-auth")

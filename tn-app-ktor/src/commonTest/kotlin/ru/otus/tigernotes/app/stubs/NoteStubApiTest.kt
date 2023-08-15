@@ -8,6 +8,8 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import ru.otus.tigernotes.api.apiMapper
 import ru.otus.tigernotes.api.models.*
+import ru.otus.tigernotes.app.auth.addAuth
+import ru.otus.tigernotes.app.config.KtorAuthConfig
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -29,6 +31,7 @@ class NoteStubApiTest {
                     stub = NoteRequestDebugStubs.SUCCESS
                 )
             )
+            addAuth(config = KtorAuthConfig.TEST)
             contentType(ContentType.Application.Json)
             val requestJson = apiMapper.encodeToString(requestObj)
             setBody(requestJson)
@@ -50,6 +53,7 @@ class NoteStubApiTest {
                     stub = NoteRequestDebugStubs.SUCCESS
                 )
             )
+            addAuth(config = KtorAuthConfig.TEST)
             contentType(ContentType.Application.Json)
             val requestJson = apiMapper.encodeToString(requestObj)
             setBody(requestJson)
@@ -77,6 +81,7 @@ class NoteStubApiTest {
                     stub = NoteRequestDebugStubs.SUCCESS
                 )
             )
+            addAuth(config = KtorAuthConfig.TEST)
             contentType(ContentType.Application.Json)
             val requestJson = apiMapper.encodeToString(requestObj)
             setBody(requestJson)
@@ -100,6 +105,7 @@ class NoteStubApiTest {
                     stub = NoteRequestDebugStubs.SUCCESS
                 )
             )
+            addAuth(config = KtorAuthConfig.TEST)
             contentType(ContentType.Application.Json)
             val requestJson = apiMapper.encodeToString(requestObj)
             setBody(requestJson)
@@ -121,6 +127,7 @@ class NoteStubApiTest {
                     stub = NoteRequestDebugStubs.SUCCESS
                 )
             )
+            addAuth(config = KtorAuthConfig.TEST)
             contentType(ContentType.Application.Json)
             val requestJson = apiMapper.encodeToString(requestObj)
             setBody(requestJson)

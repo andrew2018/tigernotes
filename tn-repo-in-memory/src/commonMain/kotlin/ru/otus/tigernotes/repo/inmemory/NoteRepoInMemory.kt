@@ -10,10 +10,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import ru.otus.tigernotes.common.NONE
 import ru.otus.tigernotes.common.helpers.errorRepoConcurrency
-import ru.otus.tigernotes.common.models.Note
-import ru.otus.tigernotes.common.models.NoteId
-import ru.otus.tigernotes.common.models.NoteLock
-import ru.otus.tigernotes.common.models.TnError
+import ru.otus.tigernotes.common.models.*
 import ru.otus.tigernotes.common.repo.*
 import ru.otus.tigernotes.repo.inmemory.model.NoteEntity
 import kotlin.time.Duration
@@ -118,6 +115,11 @@ class NoteRepoInMemory(
 
     override suspend fun searchNote(rq: DbNoteFilterRequest): DbNotesResponse {
         val result = cache.asMap().asSequence()
+            .filter { entry ->
+                rq.ownerId.takeIf { it != TnUserId.NONE }?.let {
+                    it.asString() == entry.value.ownerId
+                } ?: true
+            }
             .filter { entry ->
                 rq.searchTitle.takeIf { it.isNotBlank() }?.let {
                     entry.value.title?.contains(it) ?: false

@@ -11,6 +11,7 @@ import ru.otus.tigernotes.common.helpers.asTnError
 import ru.otus.tigernotes.common.models.Note
 import ru.otus.tigernotes.common.models.NoteId
 import ru.otus.tigernotes.common.models.NoteLock
+import ru.otus.tigernotes.common.models.TnUserId
 import ru.otus.tigernotes.common.repo.*
 import java.time.ZoneOffset
 
@@ -107,6 +108,9 @@ class RepoNote(
             val res = NoteTable.select {
                 buildList {
                     add(Op.TRUE)
+                    if (rq.ownerId != TnUserId.NONE) {
+                        add(NoteTable.owner eq rq.ownerId.asString())
+                    }
                     if (rq.searchTitle.isNotBlank()) {
                         add(
                             (NoteTable.title like "%${rq.searchTitle}%")

@@ -3,9 +3,11 @@ package ru.otus.tigernotes.biz.operations
 import com.crowdproj.kotlin.cor.ICorAddExecDsl
 import com.crowdproj.kotlin.cor.handlers.chain
 import com.crowdproj.kotlin.cor.handlers.worker
-import kotlinx.datetime.Clock
 import ru.otus.tigernotes.biz.general.prepareResult
 import ru.otus.tigernotes.biz.groups.stubs
+import ru.otus.tigernotes.biz.permissions.accessValidation
+import ru.otus.tigernotes.biz.permissions.chainPermissions
+import ru.otus.tigernotes.biz.permissions.frontPermissions
 import ru.otus.tigernotes.biz.repo.repoCreate
 import ru.otus.tigernotes.biz.repo.repoPrepareCreate
 import ru.otus.tigernotes.biz.validation.*
@@ -26,7 +28,7 @@ fun ICorAddExecDsl<TnContext>.createOperation(titleOperation: String, command: T
         stubNoCase("Ошибка: запрошенный стаб недопустим")
     }
     validation {
-        worker("Копируем поля в noteValidating") { noteValidating = note.copy() }
+        worker("Копируем поля в noteValidating") { noteValidating = note.deepCopy() }
         worker("Очистка id") { noteValidating.id = NoteId.NONE }
         worker("Очистка заголовка") { noteValidating.title = noteValidating.title.trim() }
         worker("Очистка описания") { noteValidating.description = noteValidating.description.trim() }
@@ -38,11 +40,14 @@ fun ICorAddExecDsl<TnContext>.createOperation(titleOperation: String, command: T
 
         finishAdValidation("Завершение проверок")
     }
+    chainPermissions("Вычисление разрешений для пользователя")
     chain {
         title = "Логика сохранения"
         repoPrepareCreate("Подготовка заметки для сохранения")
+        accessValidation("Вычисление прав доступа")
         repoCreate("Создание заметки в БД")
     }
+    frontPermissions("Вычисление пользовательских разрешений для фронтенда")
     prepareResult("Подготовка ответа")
 
     this.title = titleOperation

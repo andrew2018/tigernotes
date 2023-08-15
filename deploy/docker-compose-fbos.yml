@@ -18,6 +18,7 @@ services:
     depends_on:
       - psql
       - fluent-bit
+      - keycloak
     volumes:
       - ./volumes/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./volumes/nginx/nginx.conf:/etc/nginx/nginx.conf
@@ -86,6 +87,18 @@ services:
         hard: 65536
     volumes:
       - opensearch-data:/usr/share/opensearch/data
+
+  keycloak:
+    image: jboss/keycloak
+    ports:
+      - "8081:8080"
+      - "8082:9990"
+    volumes:
+      - ./keycloak:/tmp
+    environment:
+      KEYCLOAK_USER: otus
+      KEYCLOAK_PASSWORD: otus
+      KEYCLOAK_IMPORT: "/tmp/realm-export.json"
 
   dashboards:
     image: opensearchproject/opensearch-dashboards:latest

@@ -18,6 +18,7 @@ kotlin {
                 implementation("com.crowdproj:kotlin-cor:$crowdprojCorVersion")
 
                 implementation(project(":tn-common"))
+                implementation(project(":tn-app-auth"))
                 implementation(project(":tn-repo-in-memory"))
                 implementation(project(":tn-stubs"))
             }

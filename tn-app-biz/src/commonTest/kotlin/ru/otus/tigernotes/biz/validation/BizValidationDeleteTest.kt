@@ -1,9 +1,10 @@
-package ru.otus.tigernotes.validation
+package ru.otus.tigernotes.biz.validation
 
 import NoteRepoStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import ru.otus.tigernotes.biz.NoteProcessor
+import ru.otus.tigernotes.biz.addTestPrincipal
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.TnCorSettings
 import ru.otus.tigernotes.common.models.*
@@ -29,6 +30,7 @@ class BizValidationDeleteTest {
                 lock = NoteLock("123-234-abc-ABC")
             },
         )
+        ctx.addTestPrincipal(NoteStub.get().ownerId)
         processor.exec(ctx)
         assertEquals(1, ctx.errors.size)
         assertEquals(TnState.FAILING, ctx.state)

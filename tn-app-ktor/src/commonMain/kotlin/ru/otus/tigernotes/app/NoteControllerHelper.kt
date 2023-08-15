@@ -1,12 +1,15 @@
 package ru.otus.tigernotes.app
 
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import ru.otus.tigernotes.api.apiMapper
 import ru.otus.tigernotes.api.models.*
+import ru.otus.tigernotes.app.base.toModel
 import ru.otus.tigernotes.biz.process
 import ru.otus.tigernotes.common.models.TnCommand
 import ru.otus.tigernotes.logging.common.ITnLogWrapper
@@ -22,6 +25,7 @@ suspend inline fun <reified Q : IRequest, @Suppress("unused") reified R : IRespo
     appSettings.processor.process(logger, logId, command,
         {ctx ->
             val request = apiMapper.decodeFromString<Q>(receiveText())
+            ctx.principal = this.request.call.principal<JWTPrincipal>().toModel()
             ctx.fromTransport(request)
         },
         { ctx ->

@@ -5,6 +5,9 @@ import com.crowdproj.kotlin.cor.handlers.chain
 import com.crowdproj.kotlin.cor.handlers.worker
 import ru.otus.tigernotes.biz.general.prepareResult
 import ru.otus.tigernotes.biz.groups.stubs
+import ru.otus.tigernotes.biz.permissions.chainPermissions
+import ru.otus.tigernotes.biz.permissions.frontPermissions
+import ru.otus.tigernotes.biz.permissions.searchTypes
 import ru.otus.tigernotes.biz.repo.repoSearch
 import ru.otus.tigernotes.biz.validation.*
 import ru.otus.tigernotes.biz.workers.*
@@ -28,7 +31,10 @@ fun ICorAddExecDsl<TnContext>.searchOperation(titleOperation: String, command: T
 
         finishAdFilterValidation("Успешное завершение процедуры валидации")
     }
+    chainPermissions("Вычисление разрешений для пользователя")
+    searchTypes("Подготовка поискового запроса")
     repoSearch("Поиск заметки в БД по фильтру")
+    frontPermissions("Вычисление пользовательских разрешений для фронтенда")
     prepareResult("Подготовка ответа")
 
     this.title = titleOperation

@@ -82,6 +82,13 @@ components:
           type: string
         timeReminder:
           type: string
+        ownerId:
+          type: string
+        permissions:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
 
     NoteFilterLog:
       title: Модель лога фильтра
@@ -91,5 +98,7 @@ components:
         dateStart:
           type: string
         dateEnd:
+          type: string
+        ownerId:
           type: string
 

@@ -12,10 +12,10 @@ fun ICorAddExecDsl<TnContext>.repoSearch(title: String) = worker {
     on { state == TnState.RUNNING }
     handle {
         val request = DbNoteFilterRequest(
+            ownerId = noteFilterValidated.ownerId,
             searchTitle = noteFilterValidated.searchTitle,
             dateStart = noteFilterValidated.dateStart,
             dateEnd = noteFilterValidated.dateEnd
-
         )
         val result = noteRepo.searchNote(request)
         val resultNotes = result.data

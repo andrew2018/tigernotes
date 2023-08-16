@@ -10,7 +10,8 @@ fun ICorAddExecDsl<TnContext>.repoPrepareCreate(title: String) = worker {
     description = "Подготовка объекта к сохранению в базе данных"
     on { state == TnState.RUNNING }
     handle {
-        noteRepoRead = noteValidated.copy()
+        noteRepoRead = noteValidated.deepCopy()
+        noteRepoRead.ownerId = principal.id
         noteRepoPrepare = noteRepoRead
     }
 }

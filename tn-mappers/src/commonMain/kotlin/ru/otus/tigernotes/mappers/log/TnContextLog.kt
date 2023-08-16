@@ -44,7 +44,9 @@ fun Note.toLog() = NoteLog(
     id = id.takeIf { it != NoteId.NONE }?.asString(),
     title = title.takeIf { it.isNotBlank() },
     description = description.takeIf { it.isNotBlank() },
+    ownerId = ownerId.takeIf { it != TnUserId.NONE }?.asString(),
     timeCreate = timeCreate.takeIf { it != Instant.NONE }.toString(),
     email = email.takeIf { it.isNotBlank() },
-    timeReminder = timeReminder.takeIf { it != Instant.NONE }.toString()
+    timeReminder = timeReminder.takeIf { it != Instant.NONE }.toString(),
+    permissions = permissionsClient.takeIf { it.isNotEmpty() }?.map { it.name }?.toSet()
 )

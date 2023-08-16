@@ -1,13 +1,15 @@
-package ru.otus.tigernotes.validation
+package ru.otus.tigernotes.biz.validation
 
 import NoteRepoStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
 import ru.otus.tigernotes.biz.NoteProcessor
+import ru.otus.tigernotes.biz.addTestPrincipal
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.TnCorSettings
 import ru.otus.tigernotes.common.models.*
+import ru.otus.tigernotes.stubs.NoteStub
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -30,6 +32,7 @@ class BizValidationSearchTest {
                 dateEnd = LocalDate.parse("2023-05-01")
             )
         )
+        ctx.addTestPrincipal(NoteStub.get().ownerId)
         processor.exec(ctx)
         assertEquals(0, ctx.errors.size)
         assertNotEquals(TnState.FAILING, ctx.state)

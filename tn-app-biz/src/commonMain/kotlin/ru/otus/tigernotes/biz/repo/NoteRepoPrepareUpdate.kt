@@ -11,7 +11,7 @@ fun ICorAddExecDsl<TnContext>.repoPrepareUpdate(title: String) = worker {
             "и данные, полученные от пользователя"
     on { state == TnState.RUNNING }
     handle {
-        noteRepoPrepare = noteRepoRead.copy().apply {
+        noteRepoPrepare = noteRepoRead.deepCopy().apply {
             this.title = noteValidated.title
             this.description = noteValidated.description
             this.email = noteValidated.email

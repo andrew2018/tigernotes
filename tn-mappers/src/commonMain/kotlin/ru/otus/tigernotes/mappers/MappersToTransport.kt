@@ -65,11 +65,24 @@ private fun Note.toTransportNote(): NoteResponseObject = NoteResponseObject(
     id = id.takeIf { it != NoteId.NONE }?.asString(),
     title = title.takeIf { it.isNotBlank() },
     description = description.takeIf { it.isNotBlank() },
+    ownerId = ownerId.takeIf { it != TnUserId.NONE }?.asString(),
     timeCreate = timeCreate.takeIf { it != Instant.NONE }.toString(),
     email = email.takeIf { it.isNotBlank() },
     timeReminder = timeReminder.takeIf { it != Instant.NONE }.toString(),
+    permissions = permissionsClient.toTransportNote(),
     lock = lock.takeIf { it != NoteLock.NONE }?.asString()
 )
+
+private fun Set<NotePermissionClient>.toTransportNote(): Set<NotePermissions>? = this
+    .map { it.toTransportNote() }
+    .toSet()
+    .takeIf { it.isNotEmpty() }
+
+private fun NotePermissionClient.toTransportNote() = when (this) {
+    NotePermissionClient.READ -> NotePermissions.READ
+    NotePermissionClient.UPDATE -> NotePermissions.UPDATE
+    NotePermissionClient.DELETE -> NotePermissions.DELETE
+}
 
 private fun List<TnError>.toTransportErrors(): List<Error>? = this
     .map { it.toTransportNote() }

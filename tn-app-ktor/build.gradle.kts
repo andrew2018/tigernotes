@@ -66,6 +66,7 @@ kotlin {
                 implementation(ktor("content-negotiation")) // "io.ktor:ktor-server-content-negotiation:$ktorVersion"
                 implementation(ktor("websockets")) // "io.ktor:ktor-websockets:$ktorVersion"
                 implementation(ktor("auth")) // "io.ktor:ktor-auth:$ktorVersion"
+                implementation(ktor("auth-jwt")) // "io.ktor:ktor-auth-jwt:$ktorVersion"
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
                 implementation(project(":tn-common"))

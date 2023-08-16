@@ -12,6 +12,6 @@ fun ICorAddExecDsl<TnContext>.repoPrepareDelete(title: String) = worker {
     """.trimIndent()
     on { state == TnState.RUNNING }
     handle {
-        noteRepoPrepare = noteValidated.copy()
+        noteRepoPrepare = noteValidated.deepCopy()
     }
 }

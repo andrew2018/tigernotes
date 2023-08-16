@@ -1,10 +1,11 @@
-package ru.otus.tigernotes.validation
+package ru.otus.tigernotes.biz.validation
 
 import NoteRepoStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import ru.otus.tigernotes.biz.NoteProcessor
+import ru.otus.tigernotes.biz.addTestPrincipal
 import ru.otus.tigernotes.common.TnContext
 import ru.otus.tigernotes.common.TnCorSettings
 import ru.otus.tigernotes.common.models.Note
@@ -37,6 +38,7 @@ class BizValidationCreateTest {
                 timeReminder = Instant.parse("2023-07-01T10:00:00Z")
             )
         )
+        ctx.addTestPrincipal(NoteStub.get().ownerId)
         processor.exec(ctx)
         assertEquals(0, ctx.errors.size)
         assertNotEquals(TnState.FAILING, ctx.state)
@@ -57,6 +59,7 @@ class BizValidationCreateTest {
                 timeReminder = Instant.parse("2023-07-01T10:00:00Z")
             ),
         )
+        ctx.addTestPrincipal(NoteStub.get().ownerId)
         processor.exec(ctx)
         assertEquals(1, ctx.errors.size)
         assertEquals(TnState.FAILING, ctx.state)
@@ -79,6 +82,7 @@ class BizValidationCreateTest {
                 timeReminder = Instant.parse("2023-07-01T10:00:00Z")
             ),
         )
+        ctx.addTestPrincipal(NoteStub.get().ownerId)
         processor.exec(ctx)
         assertEquals(1, ctx.errors.size)
         assertEquals(TnState.FAILING, ctx.state)
@@ -101,6 +105,7 @@ class BizValidationCreateTest {
                 timeReminder = Instant.parse("2023-07-01T10:00:00Z")
             ),
         )
+        ctx.addTestPrincipal(NoteStub.get().ownerId)
         processor.exec(ctx)
         assertEquals(1, ctx.errors.size)
         assertEquals(TnState.FAILING, ctx.state)
@@ -123,6 +128,7 @@ class BizValidationCreateTest {
                 timeReminder = Instant.parse("2023-07-01T10:00:00Z")
             ),
         )
+        ctx.addTestPrincipal(NoteStub.get().ownerId)
         processor.exec(ctx)
         assertEquals(1, ctx.errors.size)
         assertEquals(TnState.FAILING, ctx.state)
